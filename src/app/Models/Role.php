@@ -9,6 +9,8 @@ class Role extends Model
 {
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(\App\Models\User::class);
+        return $this->belongsToMany(\App\Models\User::class)
+            ->withPivot('active')
+            ;
     }
 }
