@@ -9,7 +9,8 @@ use Illuminate\Support\Facades\Hash;
 class Admin extends Model
 {
     protected $fillable = [
-        'name',
+        'first_name', 'last_name',
+        'username',
         'email',
         'password',
     ];
