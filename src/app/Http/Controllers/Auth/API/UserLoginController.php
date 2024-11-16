@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Cache;
 
 class UserLoginController extends Controller
 {
@@ -14,14 +15,27 @@ class UserLoginController extends Controller
         $request->authenticate();
 
         $user  =  User::where('email', $request->email)->firstOrFail();
-        $token = $user->createToken('auth_token')->plainTextToken;
-
-        return response()->json([
+        $response = [
             'message'  => 'Login success',
             'status'   => 'success',
             'id'       => $user->id,
             'username' => $user->username,
-            'token'    => $token,
-        ]);
+        ];
+        $tokenName = "user_auth_token_$user->email";
+        $cachedToken = Cache::get($tokenName);
+        if (Cache::has($tokenName)) {
+            $response['token'] = $cachedToken;
+            return response()->json($response);
+        }
+
+        $tokenObject = $user->tokens()->where('name', $tokenName)->first();
+        $token = !is_null($tokenObject) ? $tokenObject->token : null;
+        if (!$token) {
+            $token = $user->createToken($tokenName)->plainTextToken;
+        }
+
+        Cache::put($tokenName, $token);
+        $response['token'] = $token;
+        return response()->json($response);
     }
 }
