@@ -1,3 +1,5 @@
 .idea/
 db-dev-setup-tinker.php
 db-prod-setup-tinker.php
+
+.env
