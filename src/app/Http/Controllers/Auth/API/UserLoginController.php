@@ -14,7 +14,7 @@ class UserLoginController extends Controller
     {
         $request->authenticate();
 
-        $user  =  User::where('email', $request->email)->firstOrFail();
+        $user  =  Auth()->user();
         $response = [
             'message'  => 'Login success',
             'status'   => 'success',
