@@ -69,8 +69,8 @@ class User extends Authenticatable
     protected function username(): Attribute
     {
         return Attribute::make(
-            get: fn () => strtolower(str_replace(' ', '_', $this->first_name . ' ' . $this->last_name)),
-            set: fn () => strtolower(str_replace(' ', '_', $this->first_name . ' ' . $this->last_name)),
+            get: fn () => strtolower($this->first_name . $this->last_name),
+            set: fn () => strtolower($this->first_name . $this->last_name),
         );
     }
 
