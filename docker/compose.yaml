@@ -1,13 +1,20 @@
 services:
   ipsc-be-php:
-    build: .
-    container_name: ipsc-app-php
+    build:
+      # use project root as build context so we can access all files
+      context: ../
+      args:
+        - env=dev
+      dockerfile: docker/Dockerfile
+    image: laravel/php
+    container_name: ipsc-be-php
     restart: ${DOCKER_RESTART_POLICY}
     ports:
       - ${APP_PORT}:80
     environment:
       SERVICE_NAME: app
       SERVICE_TAGS: dev
+    working_dir: /var/www
     volumes:
       - ./../src/:/var/www
       - ./php/dev/php.ini:/usr/local/etc/php/conf.d/local.ini
@@ -24,13 +31,13 @@ services:
     restart: unless-stopped
     tty: true
     ports:
-      - "80:80"
-      - "443:443"
+      - ${NGINX_PORT}:80
+      - ${NGINX_SSL_PORT}:443
     volumes:
       - ./../src/:/var/www
       - ./nginx/:/etc/nginx/conf.d/
     networks:
-      - adv-be-network
+      - ipsc-be-network
 
   ipsc-db-php:
     image: 'mariadb:latest'
@@ -39,7 +46,7 @@ services:
       - 'MARIADB_DATABASE=${DB_DATABASE}'
       - 'MARIADB_PASSWORD=${DB_PASSWORD}'
       - 'MARIADB_ROOT_PASSWORD=${DB_ROOT_PASSWORD}'
-      - 'MARIADB_USER=${DB_USER}'
+      - 'MARIADB_USER=${DB_USERNAME}'
     ports:
       - '${DB_PORT}:3306'
     volumes:
@@ -47,15 +54,15 @@ services:
     networks:
       - ipsc-be-network
 
-  ipsc-pma:
+  ipsc-pma-php:
     image: phpmyadmin/phpmyadmin
-    container_name: ipsc-pma
+    container_name: ipsc-pma-php
     environment:
-      - PMA_HOST=ipsc-db
+      - PMA_HOST=ipsc-db-php
       - UPLOAD_LIMIT=1G
     restart: always
     ports:
-      - 8081:80
+      - ${PMA_PORT}:80
     networks:
       - ipsc-be-network
 
@@ -64,7 +71,7 @@ services:
     ports:
       - '${FORWARD_REDIS_PORT:-6380}:6379'
     volumes:
-      - 'sail-redis8003:/data'
+      - 'redisdata:/data'
     networks:
       - ipsc-be-network
     healthcheck:
@@ -84,4 +91,6 @@ networks:
 # Volumes
 volumes:
   dbdata:
+    driver: local
+  redisdata:
     driver: local
