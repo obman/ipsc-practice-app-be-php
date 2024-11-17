@@ -38,6 +38,7 @@ services:
       - ./nginx/:/etc/nginx/conf.d/
     networks:
       - ipsc-be-network
+      - app-network-ipsc-fe
 
   ipsc-db-php:
     image: 'mariadb:latest'
@@ -87,6 +88,8 @@ services:
 networks:
   ipsc-be-network:
     driver: bridge
+  app-network-ipsc-fe:
+    external: true
 
 # Volumes
 volumes:
