@@ -13,11 +13,13 @@ class ApiAuthController extends Controller
     public function login(LoginRequest $request): UserResource
     {
         $request->authenticate();
-
-        $user = Auth()->user();
-
         return new UserResource(Auth()->user());
     }
+
+    // need new request class
+    // where would be logic for creating new user?
+    public function register()
+    {}
 
     public function logout(Request $request): Response
     {
