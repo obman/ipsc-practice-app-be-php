@@ -1,5 +1,5 @@
 services:
-  ipsc-be-php:
+  ipsc-be-php-app:
     build:
       # use project root as build context so we can access all files
       context: ../
@@ -7,7 +7,7 @@ services:
         - env=dev
       dockerfile: docker/Dockerfile
     image: laravel/php
-    container_name: ipsc-be-php
+    container_name: ipsc-be-php-app
     restart: ${DOCKER_RESTART_POLICY}
     ports:
       - ${APP_PORT}:80
@@ -52,7 +52,7 @@ services:
     ports:
       - '${DB_PORT}:3306'
     volumes:
-      - dbdata:/var/lib/mysql/
+      - ipscdbdata:/var/lib/mysql/
     networks:
       - ipsc-be-network
       - app-network-ipsc-fe
@@ -96,7 +96,7 @@ networks:
 
 # Volumes
 volumes:
-  dbdata:
+  ipscdbdata:
     driver: local
   redisdata:
     driver: local
