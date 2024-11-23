@@ -70,7 +70,7 @@ class User extends Authenticatable
     {
         return Attribute::make(
             get: fn () => strtolower($this->first_name . $this->last_name),
-            set: fn () => strtolower($this->first_name . $this->last_name),
+            //set: fn () => strtolower($this->first_name . $this->last_name),
         );
     }
 
