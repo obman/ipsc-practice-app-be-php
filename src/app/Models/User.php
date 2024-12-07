@@ -66,14 +66,6 @@ class User extends Authenticatable
         );
     }
 
-    protected function username(): Attribute
-    {
-        return Attribute::make(
-            get: fn () => strtolower($this->first_name . $this->last_name),
-            //set: fn () => strtolower($this->first_name . $this->last_name),
-        );
-    }
-
     public function roles(): BelongsToMany
     {
         return $this->belongsToMany(\App\Models\Role::class)
