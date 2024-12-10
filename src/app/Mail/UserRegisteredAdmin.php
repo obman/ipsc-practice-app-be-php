@@ -4,6 +4,7 @@ namespace App\Mail;
 
 use App\Models\User;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
@@ -21,7 +22,7 @@ class UserRegisteredAdmin extends Mailable
      * Create a new message instance.
      */
     public function __construct(
-        public User $user
+        public User|Authenticatable $user
     )
     {
         //
