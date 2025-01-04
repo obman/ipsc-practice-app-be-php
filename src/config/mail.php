@@ -120,7 +120,6 @@ return [
         'address' => env('MAIL_REPLY_TO_ADDRESS', 'hello@example.com'),
         'name' => env('MAIL_REPLY_TO_NAME', 'Example'),
     ],
-
     'admin_email' => env('ADMIN_EMAIL', 'hello@example.com'),
 
 ];
