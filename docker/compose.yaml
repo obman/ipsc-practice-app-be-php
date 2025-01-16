@@ -44,6 +44,7 @@ services:
   ipsc-db-php:
     image: 'mariadb:latest'
     container_name: ipsc-db-php
+    restart: unless-stopped
     environment:
       - 'MARIADB_DATABASE=${DB_DATABASE}'
       - 'MARIADB_PASSWORD=${DB_PASSWORD}'
