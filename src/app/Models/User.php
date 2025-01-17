@@ -68,8 +68,19 @@ class User extends Authenticatable
 
     public function roles(): BelongsToMany
     {
-        return $this->belongsToMany(\App\Models\Role::class)
+        return $this->belongsToMany(Role::class)
             ->withPivot('active')
             ;
+    }
+
+    public function assignRole(?string $roleName = null): void
+    {
+        if (empty($roleName)) {
+            $role = Role::defaultRole()->firstOrFail();
+        } else {
+            $role = Role::where('name', $roleName)->firstOrFail();
+        }
+
+        $this->roles()->attach($role);
     }
 }
