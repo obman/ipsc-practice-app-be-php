@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\Api\UserEmailVerificationController;
 use App\Http\Controllers\Auth\Api\UserLoginController;
 use App\Http\Controllers\Auth\Api\UserRegisterController;
 use Illuminate\Http\Request;
@@ -9,6 +10,7 @@ Route::prefix('v1')->group(function () {
     Route::middleware('throttle:3,1')->group(function() {
         Route::post('/login', UserLoginController::class);
         Route::post('/register', UserRegisterController::class);
+        Route::post('/verify-email', UserEmailVerificationController::class);
     });
 
     Route::middleware(['auth:sanctum'])->group(function () {
