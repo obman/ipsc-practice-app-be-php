@@ -5,7 +5,7 @@ namespace App\Http\Requests\Auth;
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 
-class UserEmailVerificationRequest extends FormRequest
+class MemberProfileEmailVerificationRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.

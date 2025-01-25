@@ -2,13 +2,13 @@
 
 namespace App\Listeners;
 
-use App\Mail\UserRegisteredAdmin;
-use Illuminate\Auth\Events\Registered;
+use App\Mail\MemberVerifiedEmail;
+use Illuminate\Auth\Events\Verified;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Mail;
 
-class SendUserRegistrationEmails
+class SendMemberVerificationSuccessEmail
 {
     /**
      * Create the event listener.
@@ -21,8 +21,8 @@ class SendUserRegistrationEmails
     /**
      * Handle the event.
      */
-    public function handle(Registered $event): void
+    public function handle(Verified $event): void
     {
-        Mail::to(config('mail.admin_email'))->send(new UserRegisteredAdmin($event->user));
+        Mail::to($event->user->email)->send(new MemberVerifiedEmail($event->user));
     }
 }

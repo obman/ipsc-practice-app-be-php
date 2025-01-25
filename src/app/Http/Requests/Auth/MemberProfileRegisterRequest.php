@@ -5,7 +5,7 @@ namespace App\Http\Requests\Auth;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules;
 
-class RegisterUserRequest extends FormRequest
+class MemberProfileRegisterRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.

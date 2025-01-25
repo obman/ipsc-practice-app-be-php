@@ -2,7 +2,7 @@
 
 namespace App\Mail;
 
-use App\Models\User;
+use App\Models\MemberProfile;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -14,14 +14,14 @@ use Mailtrap\EmailHeader\CategoryHeader;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Mime\Header\UnstructuredHeader;
 
-class UserVerifiedEmail extends Mailable
+class MemberVerifiedEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
     /**
      * Create a new message instance.
      */
-    public function __construct(public User|Verified $user)
+    public function __construct(public MemberProfile|Verified $user)
     {
         //
     }
@@ -56,7 +56,7 @@ class UserVerifiedEmail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.user-email-verified',
+            view: 'emails.member-email-verified',
         );
     }
 

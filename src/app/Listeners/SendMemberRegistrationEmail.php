@@ -2,11 +2,13 @@
 
 namespace App\Listeners;
 
+use App\Mail\NewMemberRegisteredAdmin;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Support\Facades\Mail;
 
-class AssignRoleToUser
+class SendMemberRegistrationEmail
 {
     /**
      * Create the event listener.
@@ -21,6 +23,6 @@ class AssignRoleToUser
      */
     public function handle(Registered $event): void
     {
-        $event->user->assignRole();
+        Mail::to(config('mail.admin_email'))->send(new NewMemberRegisteredAdmin($event->user));
     }
 }

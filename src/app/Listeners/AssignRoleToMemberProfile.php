@@ -2,13 +2,11 @@
 
 namespace App\Listeners;
 
-use App\Mail\UserVerifiedEmail;
-use Illuminate\Auth\Events\Verified;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Support\Facades\Mail;
 
-class SendUserVerificationSuccessEmail
+class AssignRoleToMemberProfile
 {
     /**
      * Create the event listener.
@@ -21,8 +19,8 @@ class SendUserVerificationSuccessEmail
     /**
      * Handle the event.
      */
-    public function handle(Verified $event): void
+    public function handle(Registered $event): void
     {
-        Mail::to($event->user->email)->send(new UserVerifiedEmail($event->user));
+        $event->user->assignRole();
     }
 }

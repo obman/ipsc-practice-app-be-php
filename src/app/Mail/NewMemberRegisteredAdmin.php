@@ -2,7 +2,7 @@
 
 namespace App\Mail;
 
-use App\Models\User;
+use App\Models\MemberProfile;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -14,7 +14,7 @@ use Mailtrap\EmailHeader\CategoryHeader;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Mime\Header\UnstructuredHeader;
 
-class UserRegisteredAdmin extends Mailable
+class NewMemberRegisteredAdmin extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -22,7 +22,7 @@ class UserRegisteredAdmin extends Mailable
      * Create a new message instance.
      */
     public function __construct(
-        public User|Authenticatable $user
+        public MemberProfile|Authenticatable $user
     )
     {
         //
@@ -58,7 +58,7 @@ class UserRegisteredAdmin extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.admin.user-registered',
+            view: 'emails.admin.member-profile-registered',
         );
     }
 

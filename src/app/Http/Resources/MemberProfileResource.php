@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Cache;
 
-class UserResource extends JsonResource
+class MemberProfileResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -19,6 +19,7 @@ class UserResource extends JsonResource
             'id'       => $this->id,
             'email'    => $this->email,
             'username' => $this->username,
+            'remember_me' => $this->remember_me
         ];
         $token = $this->getToken();
         if ($token) {
@@ -29,7 +30,7 @@ class UserResource extends JsonResource
     }
 
     private function getToken(): string {
-        $tokenName = "user_auth_token_$this->email";
+        $tokenName = "memberprofile_auth_token_$this->email";
         $token = Cache::has($tokenName) ? Cache::get($tokenName) : null;
 
         if (!is_null($token)) {
