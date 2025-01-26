@@ -29,7 +29,8 @@ class MemberProfileResource extends JsonResource
         return $response;
     }
 
-    private function getToken(): string {
+    private function getToken(): string
+    {
         $tokenName = "memberprofile_auth_token_$this->email";
         $token = Cache::has($tokenName) ? Cache::get($tokenName) : null;
 
