@@ -40,6 +40,10 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'api' => [
+            'driver' => 'session', // This can be 'passport', 'sanctum', or 'jwt' depending on your needs
+            'provider' => 'members', // Custom provider for app users
+        ],
     ],
 
     /*
@@ -65,6 +69,10 @@ return [
             'model' => env('AUTH_MODEL', App\Models\User::class),
         ],
 
+        'members' => [
+            'driver' => 'eloquent',
+            'model' => env('AUTH_MODEL', App\Models\MemberProfile::class),
+        ]
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',
@@ -93,6 +101,12 @@ return [
     'passwords' => [
         'users' => [
             'provider' => 'users',
+            'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_reset_tokens'),
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+        'members' => [
+            'provider' => 'members',
             'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_reset_tokens'),
             'expire' => 60,
             'throttle' => 60,

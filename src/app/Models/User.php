@@ -4,18 +4,20 @@ namespace App\Models;
 
 use App\Mail\UserVerifyAccount;
 use App\Notifications\IpscVerifyEmail;
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Models\Concerns\IsFilamentUser;
+use Filament\Panel;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable implements MustVerifyEmail
+class User extends Authenticatable implements MustVerifyEmail, FilamentUser
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -24,7 +26,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     protected $fillable = [
         'first_name', 'last_name',
-        'username',
+        'name',
         'email',
         'password',
     ];
@@ -52,42 +54,15 @@ class User extends Authenticatable implements MustVerifyEmail
         ];
     }
 
-    protected function firstName(): Attribute
-    {
-        return Attribute::make(
-            get: fn (string $value) => ucfirst($value),
-            set: fn (string $value) => ucfirst($value),
-        );
-    }
-
-    protected function lastName(): Attribute
-    {
-        return Attribute::make(
-            get: fn (string $value) => ucfirst($value),
-            set: fn (string $value) => ucfirst($value),
-        );
-    }
-
-    public function roles(): BelongsToMany
-    {
-        return $this->belongsToMany(Role::class)
-            ->withPivot('active')
-            ;
-    }
-
-    public function assignRole(?string $roleName = null): void
-    {
-        if (empty($roleName)) {
-            $role = Role::defaultRole()->firstOrFail();
-        } else {
-            $role = Role::where('name', $roleName)->firstOrFail();
-        }
-
-        $this->roles()->attach($role);
-    }
-
     public function sendEmailVerificationNotification()
     {
         $this->notify(new IpscVerifyEmail($this));
+    }
+
+    // Filament
+    public function canAccessPanel(Panel $panel): bool
+    {
+        // verify if it has is_filament_user set to true
+        return true;
     }
 }

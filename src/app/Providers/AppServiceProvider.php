@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use Filament\Support\Colors\Color;
+use Filament\Support\Facades\FilamentColor;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -35,5 +37,9 @@ class AppServiceProvider extends ServiceProvider
                 );
             });
         }
+
+        FilamentColor::register([
+            'primary' => Color::hex('#eb9130')
+        ]);
     }
 }

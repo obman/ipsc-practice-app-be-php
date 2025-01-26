@@ -7,3 +7,7 @@ Route::get('/', function () {
 });
 
 require __DIR__.'/auth.php';
+
+Route::get('/test', function () {
+    return view('vendor.filament.components.brand');
+});
