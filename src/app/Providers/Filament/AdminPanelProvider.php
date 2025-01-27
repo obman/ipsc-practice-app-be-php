@@ -32,7 +32,7 @@ class AdminPanelProvider extends PanelProvider
                 'primary' => Color::hex('#eb9130'),
                 'secondary' => Color::hex('#46515a')
             ])
-            ->brandLogo(url('ipsc-logo.svg'))
+            ->brandLogo(asset('ipsc-logo.svg'))
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
