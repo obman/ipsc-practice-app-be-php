@@ -2,10 +2,10 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\MemberProfileResource\Pages;
-use App\Models\MemberProfile;
+use App\Filament\Resources\UserResource\Pages;
+use App\Filament\Resources\UserResource\RelationManagers;
+use App\Models\User;
 use Filament\Forms;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -13,9 +13,9 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class MemberProfileResource extends Resource
+class UserResource extends Resource
 {
-    protected static ?string $model = MemberProfile::class;
+    protected static ?string $model = User::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -23,25 +23,17 @@ class MemberProfileResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('first_name')
-                    ->maxLength(255)
-                    ->default(null),
-                Forms\Components\TextInput::make('last_name')
-                    ->maxLength(255)
-                    ->default(null),
-                Forms\Components\TextInput::make('username')
-                    ->maxLength(255)
-                    ->default(null),
+                Forms\Components\TextInput::make('name')
+                    ->required()
+                    ->maxLength(255),
                 Forms\Components\TextInput::make('email')
                     ->email()
                     ->required()
                     ->maxLength(255),
-                Select::make('role_id')
-                    ->relationship(name: 'roles', titleAttribute: 'name'),
-                Forms\Components\Toggle::make('remember_me'),
                 Forms\Components\DateTimePicker::make('email_verified_at'),
                 Forms\Components\TextInput::make('password')
                     ->password()
+                    ->required()
                     ->maxLength(255),
             ]);
     }
@@ -50,26 +42,17 @@ class MemberProfileResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('first_name')
-                    ->sortable()
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('last_name')
-                    ->sortable()
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('username')
-                    ->sortable()
+                Tables\Columns\TextColumn::make('name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
-                    ->sortable()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('roles.name')
-                    ->label('Role'),
-                Tables\Columns\IconColumn::make('remember_me')
-                    ->boolean()
-                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('email_verified_at')
                     ->dateTime()
                     ->sortable(),
+                Tables\Columns\TextColumn::make('deleted_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -105,10 +88,10 @@ class MemberProfileResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListMemberProfiles::route('/'),
-            'create' => Pages\CreateMemberProfile::route('/create'),
-            'view' => Pages\ViewMemberProfile::route('/{record}'),
-            'edit' => Pages\EditMemberProfile::route('/{record}/edit'),
+            'index' => Pages\ListUsers::route('/'),
+            'create' => Pages\CreateUser::route('/create'),
+            'view' => Pages\ViewUser::route('/{record}'),
+            'edit' => Pages\EditUser::route('/{record}/edit'),
         ];
     }
 
