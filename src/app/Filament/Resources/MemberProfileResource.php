@@ -4,12 +4,16 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\MemberProfileResource\Pages;
 use App\Models\MemberProfile;
-use Filament\Forms;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
@@ -23,26 +27,39 @@ class MemberProfileResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('first_name')
-                    ->maxLength(255)
-                    ->default(null),
-                Forms\Components\TextInput::make('last_name')
-                    ->maxLength(255)
-                    ->default(null),
-                Forms\Components\TextInput::make('username')
-                    ->maxLength(255)
-                    ->default(null),
-                Forms\Components\TextInput::make('email')
-                    ->email()
-                    ->required()
-                    ->maxLength(255),
-                Select::make('role_id')
-                    ->relationship(name: 'roles', titleAttribute: 'name'),
-                Forms\Components\Toggle::make('remember_me'),
-                Forms\Components\DateTimePicker::make('email_verified_at'),
-                Forms\Components\TextInput::make('password')
-                    ->password()
-                    ->maxLength(255),
+                Section::make('Member info')
+                    ->schema([
+                        TextInput::make('first_name')
+                            ->required()
+                            ->maxLength(255)
+                            ->rules('min:4'),
+                        TextInput::make('last_name')
+                            ->required()
+                            ->maxLength(255)
+                            ->rules('min:4'),
+                    ])
+                    ->columns(2),
+                Section::make('Profile info')
+                    ->collapsible()
+                    ->schema([
+                        TextInput::make('email')
+                            ->email()
+                            ->required()
+                            ->maxLength(255),
+                        TextInput::make('username')
+                            ->required()
+                            ->maxLength(255)
+                            ->rules('min:4'),
+                        Select::make('role_id')
+                            ->relationship(name: 'roles', titleAttribute: 'name'),
+                        DateTimePicker::make('email_verified_at'),
+                        TextInput::make('password')
+                            ->password()
+                            ->maxLength(255),
+                        Toggle::make('remember_me')
+                            ->columnSpanFull()
+                    ])
+                    ->columns(2),
             ]);
     }
 
@@ -50,31 +67,31 @@ class MemberProfileResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('first_name')
+                TextColumn::make('first_name')
                     ->sortable()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('last_name')
+                TextColumn::make('last_name')
                     ->sortable()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('username')
+                TextColumn::make('username')
                     ->sortable()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('email')
+                TextColumn::make('email')
                     ->sortable()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('roles.name')
+                TextColumn::make('roles.name')
                     ->label('Role'),
                 Tables\Columns\IconColumn::make('remember_me')
                     ->boolean()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('email_verified_at')
+                TextColumn::make('email_verified_at')
                     ->dateTime()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
