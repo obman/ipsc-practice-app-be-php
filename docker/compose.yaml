@@ -4,7 +4,7 @@ services:
       # use project root as build context so we can access all files
       context: ../
       args:
-        - env=dev
+        - env=${APP_ENV}
       dockerfile: docker/Dockerfile
     image: laravel/php
     container_name: ipsc-be-php-app
